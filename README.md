@@ -11,7 +11,7 @@ You can use it to create and edit Azure Landing Zones architecture diagrams, and
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/matt-FFFFFF/alzarchitectureedit.git
+    git clone https://github.com/Azure/alzarchitectureeditor.git
     ```
 
 2. Open the `index.html` file in your web browser.
