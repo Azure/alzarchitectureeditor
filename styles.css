@@ -1,0 +1,513 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background-color: #f5f5f5;
+  padding: 20px;
+}
+
+header {
+  background-color: #007bff;
+  color: white;
+  padding: 15px 20px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  position: relative;
+  /* Ensure this is not overridden elsewhere */
+  z-index: 1;
+  /* Add z-index to ensure stacking context */
+}
+
+header h1 {
+  margin-bottom: 10px;
+}
+
+.header-description {
+  margin-bottom: 15px;
+  font-size: 0.95em;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.9);
+  max-width: 800px;
+}
+
+/* GitHub icon link - completely revised approach */
+.github-link {
+  position: absolute;
+  /* Position relative to the header */
+  top: 15px;
+  /* Align with the top padding of the header */
+  right: 20px;
+  /* Align with the right padding of the header */
+  color: white;
+  transition: opacity 0.2s ease;
+  display: block;
+  z-index: 10;
+  cursor: pointer !important;
+  /* Force pointer cursor to override any conflicts */
+}
+
+/* Add a more specific rule to ensure no conflicts */
+header .github-link {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+}
+
+.github-link:hover {
+  opacity: 0.8;
+}
+
+.github-link svg {
+  display: block;
+  width: 28px;
+  height: 28px;
+}
+
+.file-controls {
+  display: flex;
+  gap: 10px;
+}
+
+
+button {
+  padding: 8px 12px;
+  background-color: #0069d9;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+button.danger {
+  background-color: #dc3545;
+}
+
+button.danger:hover {
+  background-color: #c82333;
+}
+
+.container {
+  display: flex;
+  gap: 20px;
+}
+
+.panel {
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  flex: 1;
+}
+
+.panel h2 {
+  margin-bottom: 15px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+#management-groups-tree {
+  margin-bottom: 20px;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+/* Tree items - restore vertical layout while keeping drag handle */
+.tree-item {
+  padding: 8px 10px;
+  cursor: move;
+  /* Apply move cursor to the entire tree item */
+  border-left: 3px solid transparent;
+  margin: 2px 0;
+  position: relative;
+  /* Use position relative instead of flexbox */
+}
+
+.tree-item:hover {
+  background-color: #f0f0f0;
+}
+
+.tree-item.selected {
+  border-left: 3px solid #007bff;
+  background-color: #e7f1ff;
+}
+
+.tree-item .children {
+  margin-left: 20px;
+  /* Keep the indentation for child items */
+}
+
+/* Restore the vertical display of children */
+.children {
+  display: block;
+  padding-left: 20px;
+  border-left: 1px dotted #ccc;
+  margin-left: 6px;
+}
+
+/* Remove flexbox styling */
+.tree-item:hover::after {
+  content: none;
+}
+
+/* Drag handle styling - position absolutely within the tree item */
+.drag-handle {
+  opacity: 0.2;
+  font-size: 14px;
+  color: #007bff;
+  cursor: move !important;
+  /* Ensure move cursor for drag handle */
+  user-select: none;
+  display: inline-block;
+  margin-right: 4px;
+  transition: opacity 0.2s ease;
+  width: 15px;
+  text-align: center;
+}
+
+.tree-item:hover .drag-handle {
+  opacity: 1;
+}
+
+.tree-item.drag-active .drag-handle {
+  cursor: grabbing;
+  /* Change to grabbing when dragging */
+}
+
+/* Management group status indicator - keep next to drag handle */
+.mg-status-indicator {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 8px;
+  vertical-align: middle;
+  position: relative;
+  cursor: move !important;
+  /* Ensure move cursor for status indicator */
+}
+
+/* Keep the proper label display */
+.mg-label {
+  vertical-align: middle;
+}
+
+/* Drag and drop styling */
+.tree-item.dragging {
+  opacity: 0.5;
+}
+
+.tree-item.drag-active {
+  cursor: grabbing;
+}
+
+.tree-item.drag-over {
+  border: 2px dashed #007bff;
+  padding: 6px 8px;
+  /* Adjust padding to compensate for border */
+}
+
+/* Remove the existing hover effect for adding drag icon */
+.tree-item:hover::after {
+  content: none;
+}
+
+/* Drag handle styling */
+.drag-handle {
+  opacity: 0.2;
+  font-size: 14px;
+  color: #007bff;
+  cursor: move;
+  /* Ensure move cursor for drag handle */
+  user-select: none;
+  width: 15px;
+  /* Fixed width to prevent layout shift */
+  text-align: center;
+  transition: opacity 0.2s ease;
+}
+
+.tree-item:hover .drag-handle {
+  opacity: 1;
+}
+
+.tree-item.drag-active .drag-handle {
+  cursor: grabbing;
+  /* Change to grabbing when dragging */
+}
+
+/* Management group status indicator - adjust position relative to drag handle */
+.mg-status-indicator {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 8px;
+  vertical-align: middle;
+  position: relative;
+  flex-shrink: 0;
+  /* Prevent indicator from shrinking */
+  cursor: move;
+  /* Ensure move cursor for status indicator */
+}
+
+/* Make sure the label expands to fill available space */
+.mg-label {
+  flex-grow: 1;
+  vertical-align: middle;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Management group status styling */
+.tree-item.mg-exists .mg-status-indicator {
+  background-color: #28a745;
+  /* green */
+  box-shadow: 0 0 3px rgba(40, 167, 69, 0.6);
+}
+
+.tree-item.mg-not-exists .mg-status-indicator {
+  border: 2px solid #6c757d;
+  /* gray */
+  background-color: transparent;
+}
+
+/* Add tooltip to explain conflict */
+[title] {
+  position: relative;
+}
+
+/* Remove the CSS-based legend */
+#management-groups-tree::after {
+  content: none;
+}
+
+/* Legend styling */
+.legend-container {
+  margin-bottom: 15px;
+  font-size: 0.85em;
+  color: #666;
+  font-style: italic;
+  padding-left: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 15px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+}
+
+.legend-indicator {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 6px;
+}
+
+.legend-indicator.exists {
+  background-color: #28a745;
+  box-shadow: 0 0 3px rgba(40, 167, 69, 0.6);
+}
+
+.legend-indicator.not-exists {
+  border: 2px solid #6c757d;
+  background-color: transparent;
+}
+
+/* Fix alignment when dragging */
+.tree-item .mg-label {
+  vertical-align: middle;
+}
+
+.form-group {
+  margin-bottom: 15px;
+  position: relative;
+}
+
+.form-group input[type="text"],
+.form-group select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.form-group input[type="text"]:focus,
+.form-group select:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+/* Style for the checkbox to make it more visible */
+.form-group input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+#no-selection {
+  color: #666;
+  font-style: italic;
+}
+
+.architecture-name-container {
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+.architecture-name-container .form-group {
+  margin-bottom: 0;
+}
+
+/* JSON Preview Styling */
+.json-preview-container {
+  margin-top: 20px;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.json-preview-container h2 {
+  margin-bottom: 15px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+.json-preview {
+  max-height: 660px;
+  /* Increased by 65% from the original 400px */
+  overflow-y: auto;
+  background-color: #f8f8f8;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 15px;
+}
+
+.json-preview pre {
+  margin: 0;
+  white-space: pre-wrap;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 0.9em;
+  line-height: 1.4;
+}
+
+/* Basic JSON syntax highlighting */
+.json-key {
+  color: #881391;
+}
+
+.json-string {
+  color: #177500;
+}
+
+.json-number {
+  color: #1750EB;
+}
+
+.json-boolean {
+  color: #0057ff;
+}
+
+.json-null {
+  color: #777;
+}
+
+/* Add a hint about real-time updates */
+#edit-panel h2::after {
+  content: " (real-time)";
+  font-size: 0.7em;
+  color: #28a745;
+  font-weight: normal;
+  font-style: italic;
+}
+
+/* Archetype tags styling */
+.archetypes-container {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 8px;
+  background-color: #f9f9f9;
+}
+
+.archetypes-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+  min-height: 30px;
+  /* Ensure there's always space even with no tags */
+}
+
+.archetype-tag {
+  background-color: #e7f1ff;
+  border: 1px solid #c2e0ff;
+  border-radius: 3px;
+  padding: 2px 8px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.archetype-tag-text {
+  color: #0069d9;
+  font-size: 0.9em;
+}
+
+.remove-archetype {
+  cursor: pointer;
+  color: #999;
+  font-size: 1.2em;
+  line-height: 0.8;
+}
+
+.remove-archetype:hover {
+  color: #dc3545;
+}
+
+.archetype-input-wrapper {
+  display: flex;
+  gap: 8px;
+}
+
+#mg-archetypes-input {
+  flex-grow: 1;
+}
+
+.small-btn {
+  padding: 4px 8px;
+  font-size: 0.9em;
+}
+
+/* Ensure links have a pointer cursor */
+a {
+  cursor: pointer;
+}
