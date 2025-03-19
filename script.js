@@ -1006,11 +1006,21 @@ document.addEventListener('DOMContentLoaded', function () {
       return;
     }
 
-    // Create a prettified JSON string with highlighting
-    const formattedJson = JSON.stringify(currentData, null, 2);
-    const highlightedJson = syntaxHighlight(formattedJson);
+    const jsonString = JSON.stringify(currentData, null, 2)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/("(\\u[\da-fA-F]{4}|\\[^u]|[^\\"])*")(\s*:)?|(\btrue\b|\bfalse\b|\bnull\b)|(-?\d+\.?\d*(?:[eE][+\-]?\d+)?)/g, match => {
+        let cls = 'json-number';
+        if (/^"/.test(match)) {
+          cls = /:$/.test(match) ? 'json-key' : 'json-string';
+        } else if (/true|false/.test(match)) {
+          cls = 'json-boolean';
+        } else if (/null/.test(match)) {
+          cls = 'json-null';
+        }
+        return '<span class="' + cls + '">' + match + '</span>';
+      });
 
-    jsonPreview.innerHTML = highlightedJson;
+    jsonPreview.innerHTML = jsonString;
   }
 
   // JSON syntax highlighting
